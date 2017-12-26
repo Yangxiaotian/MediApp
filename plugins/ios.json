@@ -55,6 +55,9 @@
     "phonegap-plugin-barcodescanner": {
       "CAMERA_USAGE_DESCRIPTION": " ",
       "PACKAGE_NAME": "com.enjoyun.medi"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "com.enjoyun.medi"
     }
   },
   "dependent_plugins": {

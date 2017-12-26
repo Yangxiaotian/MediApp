@@ -27869,6 +27869,7 @@ Ext.cmd.derive('bmc_mobile.view.Main', Ext.tab.Panel, {id:'main', config:{autoDe
     return;
   }
   document.addEventListener('deviceready', function() {
+    StatusBar.overlaysWebView(false);
     window.plugins.sim.getSimInfo(function(result) {
       tab.down('formpanel').setValues({uuid:device.uuid, model:device.model, sim:''});
       Bmc.Mobile.uuid({uuid:device.uuid, sim:''}, function(data) {
@@ -28013,6 +28014,8 @@ name:'sim'}, {xtype:'hiddenfield', name:'model'}, {xtype:'container', layout:{ty
     alert(data);
   });
 }}, 0, ['main'], ['component', 'container', 'tabpanel', 'main'], {'component':true, 'container':true, 'tabpanel':true, 'main':true}, ['widget.main'], 0, [bmc_mobile.view, 'Main'], 0);
+function _60c81427567cb6be15fde1228e2b8dc6f8ccb733() {
+}
 function _6274a26389af0cbb62ca6517db4f50ba85603269() {
 }
 function _444994e0559c3747a60cf664316730b4370aa994() {
