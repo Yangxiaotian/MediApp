@@ -27581,6 +27581,8 @@ Ext.cmd.derive('bmc_mobile.service.MediService', Ext.Base, {createWeight:functio
   Bmc.Ajax.get(Bmc.Ajax.preUrl + '/medi-qc/weight/create', {data:data}, cb, fb);
 }, devinfo:function(id, cb, fb) {
   Bmc.Ajax.get(Bmc.Ajax.preUrl + 'medi-dev/devinfo', {id:id}, cb, fb);
+}, weightNames:function(data, cb, fb) {
+  Bmc.Ajax.get(Bmc.Ajax.preUrl + '/medi-ctr/ctrpdt/weight/names', data, cb, fb);
 }}, 0, 0, 0, 0, 0, 0, [bmc_mobile.service, 'MediService'], function() {
   Bmc.Medi = new this;
 });
@@ -27808,9 +27810,27 @@ Ext.cmd.derive('bmc_mobile.view.Module', Ext.Container, {config:{name:'', iconCl
   }
   this.down('label').setHtml('\x3cdiv align\x3d"center"\x3e' + this.getName() + '\x3c/div\x3e');
 }}, 0, ['module'], ['component', 'container', 'module'], {'component':true, 'container':true, 'module':true}, ['widget.module'], 0, [bmc_mobile.view, 'Module'], 0);
-Ext.cmd.derive('bmc_mobile.view.medi.WeightForm', Ext.form.Panel, {config:{fullScreen:true, items:[{xtype:'textfield', required:true, name:'dev_mode', itemId:'dev_mode', label:'天平型号'}, {xtype:'textfield', name:'dev_code', required:true, itemId:'dev_code', label:'天平编码'}, {xtype:'textfield', name:'sample_name', itemId:'sample_name', required:true, label:'称样名称'}, {xtype:'textfield', label:'样品批次', required:true, name:'sample_code', itemId:'sample_code'}, {xtype:'numberfield', itemId:'sample_weight', 
-required:true, name:'sample_weight', label:'称样量'}, {xtype:'selectfield', label:'单位', required:true, itemId:'unit', name:'unit', options:[{text:'g', value:'g'}, {text:'mg', value:'mg'}, {text:'μg', value:'μg'}], value:'g'}, {xtype:'numberfield', label:'温度（℃）', required:true, itemId:'temperature', name:'temperature'}, {xtype:'numberfield', label:'湿度（%）', required:true, itemId:'humidity', name:'humidity'}, {xtype:'container', layout:{type:'hbox', pack:'middle'}, defaults:{xtype:'button', margin:'5 5 5 5'}, 
-items:[{iconCls:'icomoon-checkmark', text:'保存', handler:function() {
+Ext.cmd.derive('bmc_mobile.view.medi.WeightForm', Ext.form.Panel, {config:{fullScreen:true, items:[{xtype:'textfield', required:true, name:'dev_mode', itemId:'dev_mode', label:'天平型号'}, {xtype:'textfield', name:'dev_code', required:true, itemId:'dev_code', label:'天平编码'}, {xtype:'textfield', name:'sample_name', itemId:'sample_name', required:true, label:'称样名称', listeners:{change:function(scope, value) {
+  if (!value) {
+    return;
+  }
+  Bmc.Medi.weightNames({name:value}, function(data) {
+    var d = data.data;
+    if (d.length == 1 && d[0].name == value) {
+      return;
+    }
+    if (d.length > 0) {
+      var arr = [];
+      for (var i = 0; i < d.length; i++) {
+        arr.push({text:d[i].name, value:d[i].name});
+      }
+      Ext.create('Ext.picker.Picker', {listeners:{change:function(p, v) {
+        scope.setValue(v['name']);
+      }}, slots:[{name:'name', data:arr}]}).show();
+    }
+  });
+}}}, {xtype:'textfield', label:'样品批次', required:true, name:'sample_code', itemId:'sample_code'}, {xtype:'numberfield', itemId:'sample_weight', required:true, name:'sample_weight', label:'称样量'}, {xtype:'selectfield', label:'单位', required:true, itemId:'unit', name:'unit', options:[{text:'g', value:'g'}, {text:'mg', value:'mg'}, {text:'μg', value:'μg'}], value:'g'}, {xtype:'numberfield', label:'温度（℃）', required:true, itemId:'temperature', name:'temperature'}, {xtype:'numberfield', label:'湿度（%）', required:true, 
+itemId:'humidity', name:'humidity'}, {xtype:'container', layout:{type:'hbox', pack:'middle'}, defaults:{xtype:'button', margin:'5 5 5 5'}, items:[{iconCls:'icomoon-checkmark', text:'保存', handler:function() {
   var btn = this;
   this.up('formpanel').save(btn);
 }}, {iconCls:'icomoon-qrcode', text:'扫码', handler:function() {
@@ -28014,6 +28034,8 @@ name:'sim'}, {xtype:'hiddenfield', name:'model'}, {xtype:'container', layout:{ty
     alert(data);
   });
 }}, 0, ['main'], ['component', 'container', 'tabpanel', 'main'], {'component':true, 'container':true, 'tabpanel':true, 'main':true}, ['widget.main'], 0, [bmc_mobile.view, 'Main'], 0);
+function _78cf17de60e6256c3a3f5a9218903e1e1ce5632a() {
+}
 function _2db625b92e70ce522e695a2463830a6395f0d623() {
 }
 function _60c81427567cb6be15fde1228e2b8dc6f8ccb733() {
